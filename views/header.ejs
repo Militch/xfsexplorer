@@ -42,11 +42,24 @@
             </a>
     
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a href="/" class="nav-link px-2 text-white">Home</a></li>
-              <li><a href="/blocks" class="nav-link px-2 text-white-50">Blocks</a></li>
-              <li><a href="/txs" class="nav-link px-2 text-white-50">Transactions</a></li>
+                <% if (/^($|\/$)/.test(req.baseUrl)) { %> 
+                    <li><a href="/"  class="nav-link px-2 text-white">Home</a></li>
+                <% } else { %>
+                    <li><a href="/"  class="nav-link px-2 text-white-50">Home</a></li>
+                <% } %>
+
+                <% if (/^\/blocks($|\/.?)/.test(req.baseUrl)) { %> 
+                    <li><a href="/blocks" class="nav-link px-2 text-white">Blocks</a></li>
+                <% } else { %>
+                    <li><a href="/blocks" class="nav-link px-2 text-white-50">Blocks</a></li>
+                <% } %>
+
+                <% if (/^\/txs($|\/.?)/.test(req.baseUrl)) { %> 
+                    <li><a href="/txs" class="nav-link px-2 text-white">Transactions</a></li>
+                <% } else { %>
+                    <li><a href="/txs" class="nav-link px-2 text-white-50">Transactions</a></li>
+                <% } %>
             </ul>
-    
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
               <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
             </form>
