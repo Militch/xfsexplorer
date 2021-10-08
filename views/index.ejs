@@ -1,35 +1,45 @@
 <%- include('header'); -%>
 <div class="row mb-4">
-    <div class="col-md-4 mb-2">
+    <div class="col-md-3 mb-2">
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Latest Height</h5>
               <p class="card-text">
-                  359044
+                  <%= data.latestHeight %>
               </p>
             </div>
           </div>
     </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-md-3 mb-2">
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Block Reward</h5>
               <p class="card-text">
-                  1000 XFSC
+                  <%= data.blockReward %> XFSC
               </p>
             </div>
           </div>
     </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-md-3 mb-2">
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Difficulty</h5>
               <p class="card-text">
-                  1234561
+                <%= data.currentDifficulty %> H
               </p>
             </div>
           </div>
     </div>
+    <div class="col-md-3 mb-2">
+      <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Network HashRate</h5>
+            <p class="card-text">
+              <%= data.currentDifficulty %> H/s
+            </p>
+          </div>
+        </div>
+  </div>
 </div>
 <div class="row mb-4">
     <div class="col-md-6">
