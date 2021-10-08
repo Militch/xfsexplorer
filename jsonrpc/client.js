@@ -29,7 +29,7 @@ class HttpJsonRpcClient {
         if (resp.data.jsonrpc !== JSONRPC_VER){
             throw new Error('some err');
         }
-        console.log(`got data.result=`, resp.data.result);
+        // console.log(`got data.result=`, resp.data.result);
         return resp.data.result;
     }
     packreq({method,params}) {

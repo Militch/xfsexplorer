@@ -1,6 +1,6 @@
 <%- include('header'); -%>
 <div class="row mb-4">
-    <div class="col-md-3 mb-2">
+    <div class="col-md-4 mb-2">
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Latest Height</h5>
@@ -10,7 +10,7 @@
             </div>
           </div>
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-md-4 mb-2">
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Block Reward</h5>
@@ -20,7 +20,7 @@
             </div>
           </div>
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-md-4 mb-2">
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Difficulty</h5>
@@ -30,16 +30,6 @@
             </div>
           </div>
     </div>
-    <div class="col-md-3 mb-2">
-      <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Network HashRate</h5>
-            <p class="card-text">
-              <%= data.currentDifficulty %> H/s
-            </p>
-          </div>
-        </div>
-  </div>
 </div>
 <div class="row mb-4">
     <div class="col-md-6">
@@ -57,113 +47,33 @@
                 <table class="table mb-0">
                     <thead>
                       <tr>
-                        <th scope="col">Height</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Transactions</th>
-                        <th scope="col">Size</th>
+                        <th>Height</th>
+                        <th>Time</th>
+                        <th>Miner</th>
+                        <th>Txs</th>
                       </tr>
                     </thead>
                     <tbody>
+                      <% for (let i=0; i < data.latestBlocks.length; i++) { %>
                       <tr>
-                        <th>
-                            <a href="/blocks/1">
-                                10
+                        <td>
+                            <a href="/blocks/<%= data.latestBlocks[i].height %>">
+                                <%= data.latestBlocks[i].height %>
                             </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                9
+                        </td>
+                        <td>
+                          <span class="fs-6"><%= data.latestBlocks[i].timestr %></span>
+                        </td>
+                        <td>
+                          <div class="text-truncate" style="max-width: 16rem;min-width: 16rem;">
+                            <a href="/addr/<%= data.latestBlocks[i].coinbase %>">
+                              <%= data.latestBlocks[i].coinbase %>
                             </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
+                          </div>
+                        </td>
+                        <td><%= data.latestBlocks[i].txcount %></td>                      
                       </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                8
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                7
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                6
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                5
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                4
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                3
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                2
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                1
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>10</td>
-                        <td>10 Byte</td>
-                      </tr>
+                      <% } %>
                     </tbody>
                   </table>
             </div>
@@ -185,125 +95,28 @@
                 <table class="table mb-0">
                     <thead>
                       <tr>
-                        <th scope="col">TX HASH</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">From</th>
-                        <th scope="col">To</th>
-                        <th scope="col">Val</th>
+                        <th>TX HASH</th>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Val</th>
                         <!-- <th scope="col">GAS used</th> -->
                       </tr>
                     </thead>
                     <tbody>
+                      <% for (let i=0; i < data.latestTxs.length; i++) { %>
                       <tr>
-                        <th>
+                        <td>
                             <a href="#">
                                 0xc4e7ce6sdfwe...
                             </a>
-                        </th>
+                        </td>
                         <td>10 secs ago</td>
                         <td>1fs232434...</td>
                         <td>1gdgdsf33...</td>
                         <td>10 XFSC</td>
                       </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
-                      <tr>
-                        <th>
-                            <a href="#">
-                                0xc4e7ce6sdfwe...
-                            </a>
-                        </th>
-                        <td>10 secs ago</td>
-                        <td>1fs232434...</td>
-                        <td>1gdgdsf33...</td>
-                        <td>10 XFSC</td>
-                      </tr>
+                      <% } %>
                     </tbody>
                   </table>
             </div>
