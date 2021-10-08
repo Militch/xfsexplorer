@@ -19,7 +19,7 @@ async function fetchBlocks(from, count) {
     return null;
   }
   const arr = [];
-  for (let i=from;i <= from + count; i++) {
+  for (let i=from; i > from - count; i--) {
     var blk = await cli.call({method:'Chain.GetBlockByNumber', params: {
       number: `${i}`
     }});
@@ -102,7 +102,7 @@ router.get('/', async function(req, res, next) {
     console.log(`genesisBlk:`, genesisBlk);
     currentDifficulty = calcDifficulty(genesisBlk.bits, latestHead.bits).toNumber();
   }
-  let blks = await fetchBlocks(latestHead.height - 9, 10);
+  let blks = await fetchBlocks(latestHead.height, 10);
   console.log('--');
   let txs = await fetchLatestTransactions(latestHead.height, 10);
   // console.log('txs', txs);
