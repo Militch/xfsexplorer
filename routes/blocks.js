@@ -74,7 +74,7 @@ router.get('/', async function(req, res, next) {
   let params = req.query;
   let pagenum = 0;
   if (!isEmptyStr(params.p)){
-    if (!isNaN(pagenum)) {
+    if (!isNaN(params.p)) {
       pagenum = parseInt(params.p);
     }
   }
@@ -115,8 +115,29 @@ router.get('/', async function(req, res, next) {
   res.render('blocks', { title: 'Blocks - XFS Explorer',req: req, data: modelmap });
 });
 
-router.get(/^\/(.+)/, function(req, res, next) {
-  res.render('blockdetail', { title: 'Block Detail - XFS Explorer', req: req  });
+router.get(/^\/(.+)/, async function(req, res, next) {
+  let reqHeight = req.params[0];
+  let currentHeight = 0;
+  if (!isEmptyStr(reqHeight)){
+    if (!isNaN(reqHeight)) {
+      currentHeight = parseInt(reqHeight);
+    }
+  }
+
+
+
+  console.log('currentHeight', currentHeight);
+
+  let blks =  await fetchBlocks(currentHeight, 1);
+  console.log('blks', blks);
+  if (blks.length <= 0){
+    res.status(404).render('error');
+    return;
+  }
+  let modelmap = {
+    blk: blks[0],
+  };
+  res.render('blockdetail', { title: 'Block Detail - XFS Explorer', req: req, data: modelmap  });
 });
 
 module.exports = router;

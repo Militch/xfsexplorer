@@ -105,7 +105,9 @@ router.get('/', async function(req, res, next) {
   let blks = await fetchBlocks(latestHead.height, 10);
   console.log('--');
   let txs = await fetchLatestTransactions(latestHead.height, 10);
-  // console.log('txs', txs);
+  console.log('--');
+  console.log('txs-', txs.length);
+  console.log('txs', txs);
   blks = coverBlocks(blks);
   var modelmap = {
     latestHeight: baseIntFormat(latestHead.height),
