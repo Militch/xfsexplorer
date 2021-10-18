@@ -9,10 +9,10 @@ class HttpJsonRpcClient {
             baseURL: this.url,
             timeout: 1000
         });
-        console.log(`call constructor url=${opts.url}`);
+        // console.log(`call constructor url=${opts.url}`);
     }
     async call(opts = {method:'', params: null}) {
-        console.log(`call method url=${this.url} name=${opts.method}, params=`,opts.params);
+        // console.log(`call method url=${this.url} name=${opts.method}, params=`,opts.params);
         var resp = null;
         try {
             resp = await this.axioscli.post('/', this.packreq(opts));

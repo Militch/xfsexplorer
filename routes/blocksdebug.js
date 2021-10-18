@@ -21,36 +21,25 @@ function timeformat(current = Date, last) {
     timestr = `${hr} hr ${mins} min ago`;
   } else if (diff >= 60 * 60 * 24) {
     timestr = current.toLocaleString('en-US', {
-          weekday: 'short',
-      month:'short',
+      weekday: 'short',
+      month: 'short',
       day: 'numeric',
       year: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
-      second: 'numeric', 
+      second: 'numeric',
     });
   }
   return timestr;
 }
 
 
-function coverBlocks(blocks = []) {
-  covers = [];
-  let now = new Date();
-  for (let i = 0; i < blocks.length; i++) {
-    let blk = blocks[i];
-    let timestr = timeformat(now, blk.timestamp);
-    blk.timestr = timestr;
-    blk.txcount = 0;
-    if (blk.transactions != null) {
-      blk.txcount = blk.transactions.length;
-    }
-    covers.push(blk);
-  }
-  return covers;
-}
 
-async function fetchBlocks(from, count) {
+
+
+
+
+async function fetchHeightBlocks(from, count) {
   if (from < 0) {
     from = 0
   }
@@ -58,23 +47,41 @@ async function fetchBlocks(from, count) {
     return null;
   }
   const arr = [];
-  for (let i = from; i > from - count; i--) {
-    var blk = await cli.call({
-      method: 'Chain.GetBlockByNumber',
+  for (let i = from, j=0; i > from - count && j < from+1; i--, j++) {
+    var blks = await cli.call({
+      method: 'Chain.GetBlocksByNumber',
       params: {
         number: `${i}`
       }
     });
-    if (blk === null) {
-      break;
-    }
-    arr.push(blk);
+    arr.push({
+      height: i,
+      blocks: blks
+    });
   }
   return arr;
 }
 
+function coverHeightBlocks(hblocks = []) {
+  covers = [];
+  for (let i = 0; i < hblocks.length; i++) {
+    let hblock = hblocks[i];
+    hblock.blockscount = 0;
+    if (hblock.blocks && hblock.blocks.length > 0){
+      hblock.blockscount = hblock.blocks.length;
+    }
+    let hashes = [];
+    for (let j=0;j<hblock.blockscount;j++){
+        hashes.push(hblock.blocks[j].hash);
+    }
+    hblock.hashes = hashes;
+    covers.push(hblock);
+  }
+  return covers;
+}
+
 async function fetchBlockByHash(hash) {
-  if (!hash || hash.length === 0){
+  if (!hash || hash.length === 0) {
     return null;
   }
   return cli.call({
@@ -124,10 +131,11 @@ router.get('/', async function (req, res, next) {
   if (pageto > lastHeight) {
     pageto = lastHeight;
   }
-  let blks = await fetchBlocks((lastHeight - (pagenum * pagesize)), pagesize);
-  blks = coverBlocks(blks);
+  
+  let data = await fetchHeightBlocks((lastHeight - (pagenum * pagesize)), pagesize);
+  data = coverHeightBlocks(data);
   let modelmap = {
-    list: blks,
+    list: data,
     page: {
       from: pagefrom,
       to: pageto,
@@ -138,19 +146,20 @@ router.get('/', async function (req, res, next) {
       prevpage: prevpage,
     }
   };
-  res.render('blocks', {
-    title: 'Blocks - XFS Explorer',
+  res.render('blocksdebug', {
+    title: 'Blocks (debug) - XFS Explorer',
     req: req,
     data: modelmap
   });
 });
+
 function coverBlock(blk) {
   console.log(blk);
   let blkt = parseInt(blk.timestamp);
   let blktime = new Date(blkt * 1000);
   let timestr = blktime.toLocaleString('en-US', {
     weekday: 'short',
-    month:'short',
+    month: 'short',
     day: 'numeric',
     year: 'numeric',
     hour: 'numeric',
@@ -162,12 +171,12 @@ function coverBlock(blk) {
   let txs = blk.transactions;
   if (txs != null) {
     blk.txcount = txs.length;
-    for (let i=0;i<txs.length;i++){
-      let tx =  txs[i];
+    for (let i = 0; i < txs.length; i++) {
+      let tx = txs[i];
       console.log(tx);
     }
   }
-  
+
   return blk;
 }
 router.get(/^\/(.+)/, async function (req, res, next) {

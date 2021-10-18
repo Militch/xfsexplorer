@@ -76,7 +76,11 @@
                 <% } else { %>
                     <li><a href="/blocks" class="nav-link px-2 text-white-50">Blocks</a></li>
                 <% } %>
-
+                <% if (/^\/blocksdebug($|\/.?)/.test(req.baseUrl)) { %> 
+                  <li><a href="/blocksdebug" class="nav-link px-2 text-white">Blocks(debug)</a></li>
+              <% } else { %>
+                  <li><a href="/blocksdebug" class="nav-link px-2 text-white-50">Blocks(debug)</a></li>
+              <% } %>
                 <% if (/^\/txs($|\/.?)/.test(req.baseUrl)) { %> 
                     <li><a href="/txs" class="nav-link px-2 text-white">Transactions</a></li>
                 <% } else { %>

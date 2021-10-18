@@ -83,7 +83,7 @@ function coverBlocks(blocks=[]) {
     blk.timestr = timestr;
     blk.txcount = 0;
     if (blk.transactions != null) {
-      blk.txcount = blk.txcount.length;
+      blk.txcount = blk.transactions.length;
     }
     covers.push(blk);
   }

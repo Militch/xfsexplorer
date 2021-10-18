@@ -53,7 +53,7 @@
                     Time:
                   </div>
                   <div class="col-md-9">
-                    <%= data.blk.timestamp %>
+                    <%= data.blk.timestr %>
                   </div>
             </div>
         </li>
@@ -173,12 +173,16 @@
             <tr>
               <td>
                   <a href="#">
-                      0xc4e7ce6sdfwe...
+                      <%= data.blk.transactions[i].hash %>
                   </a>
               </td>
               <td>10 secs ago</td>
-              <td>1fs232434...</td>
-              <td>1gdgdsf33...</td>
+              <td>
+                  <%= data.blk.transactions[i].from %>
+              </td>
+              <td>
+                  <%= data.blk.transactions[i].to %>
+              </td>
               <td>10 XFSC</td>
             </tr>
             <% }%>
