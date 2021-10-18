@@ -3,10 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 var indexRouter = require('./routes/index');
 var blocksRouter = require('./routes/blocks');
 var blocksDebugRouter = require('./routes/blocksdebug');
 var txsRouter = require('./routes/txs');
+
+const Service = require('./service');
 
 var app = express();
 
@@ -19,6 +22,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  const rpcapi = app.get('rpcapi');
+  let service = new Service({rpcapi: rpcapi});
+  req.service = service;
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/blocks', blocksRouter);
 app.use('/blocksdebug', blocksDebugRouter);
@@ -28,6 +38,8 @@ app.use('/txs', txsRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
