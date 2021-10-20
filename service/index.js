@@ -86,18 +86,38 @@ class Service {
         if (count < 0){
           return null;
         }
+        var firstblk = await this.fetchBlockByNumber(from);
         const arr = [];
-        for (let i = from, j=0; i > from - count && j < from+1; i--, j++) {
-          var blk = await this.rpccli.call({method:'Chain.GetBlockByNumber', params: {
-            number: `${i}`
-          }});
-          if (blk === null) {
+        let oldblk = firstblk;
+        arr.push(oldblk);
+        for (let i = from-1, j=0; i > from - count && j < from; i--, j++) {
+          oldblk = await this.fetchBlockByHash(oldblk.hash_prev_block);
+          if (oldblk === null) {
             break;
           }
-          arr.push(blk);
+          arr.push(oldblk);
         }
         return coverBlocks(arr);
     }
+    async fetchBlocksLast(from, count) {
+      if (from < 0) {
+        from = 0
+      }
+      if (count < 0){
+        return null;
+      }
+      const arr = [];
+      for (let i = from, j=0; i > from - count && j < from+1; i--, j++) {
+        var blk = await this.rpccli.call({method:'Chain.GetBlockByNumber', params: {
+          number: `${i}`
+        }});
+        if (blk === null) {
+          break;
+        }
+        arr.push(blk);
+      }
+      return coverBlocks(arr);
+  }
     fetchGenesisBlk(){
         return this.rpccli.call({method:'Chain.GetBlockByNumber', params: {
             number: "0"
@@ -105,6 +125,16 @@ class Service {
     }
     fetchChainHead(){
         return this.rpccli.call({method:'Chain.Head'});
+    }
+    fetchBlockByHash(hash){
+      return this.rpccli.call({method:'Chain.GetBlockByHash', params: {
+        hash: `${hash}`
+      }});
+    }
+    fetchBlockByNumber(number){
+      return this.rpccli.call({method:'Chain.GetBlockByNumber', params: {
+        number: `${number}`
+      }});
     }
     async fetchLatestTransactions(latestHeight, count) {
         if (latestHeight < 0 || count < 0) {

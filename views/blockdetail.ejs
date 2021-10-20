@@ -172,9 +172,11 @@
             <% for (let i=0; i < data.blk.transactions.length; i++) { %>
             <tr>
               <td>
+                <div class="text-truncate" style="max-width: 240px;">
                   <a href="#">
-                      <%= data.blk.transactions[i].hash %>
+                    <%= data.blk.transactions[i].hash %>
                   </a>
+                </div>
               </td>
               <td>10 secs ago</td>
               <td>
